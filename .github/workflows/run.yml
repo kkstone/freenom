@@ -52,4 +52,15 @@ jobs:
           sed -i "s/^ON_GITHUB_ACTIONS=.*$/ON_GITHUB_ACTIONS=true/" .env
       - name: Run
         run: |
+          echo `date +"%Y-%m-%d %H:%M:%S"` begin > time.log
           php run
+       - name: Commit #上传新的refresh_token到仓库
+      run: |
+        git config --global user.email AutoupdateRobot@email.com
+        git config --global user.name AutoupdateRobot
+        git add .
+        git commit -m "update new time log" -a
+       - name: Push changes
+         uses: ad-m/github-push-action@master
+         with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}    
